@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo for Arabic, Inter for English) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+        .en-font {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Animations */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.80), rgba(15, 23, 42, 0.80)), 
+                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Floating Leaves / Plant Sway Animation */
+        @keyframes floatLeaf {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(8deg); }
+        }
+        .animate-float {
+            animation: floatLeaf 4s ease-in-out infinite;
+        }
+
+        @keyframes plantSway {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+        .animate-sway {
+            transform-origin: bottom center;
+            animation: plantSway 3s ease-in-out infinite;
+        }
+
+        /* Pulse glow button */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.9); }
+        }
+        .btn-pulse {
+            animation: pulseGlow 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 transition-all duration-300">
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo Place -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-emerald-50 border border-emerald-100 animate-float">
+                        <img src="https://i.postimg.cc/jWyQhhZ6/file.png" alt="لوجو المسار السريع" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold text-slate-900 block leading-tight" data-ar="المسار السريع" data-en="Express Path">المسار السريع</span>
+                        <span class="text-xs text-emerald-600 font-semibold block" data-ar="للاستثمار العقاري واستصلاح الأراضي" data-en="Real Estate & Land Reclamation">للاستثمار العقاري واستصلاح الأراضي</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8 space-x-reverse text-slate-700 font-semibold">
+                    <a href="#home" class="hover:text-emerald-600 transition" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+                    <a href="#about" class="hover:text-emerald-600 transition" data-ar="عن الشركة" data-en="About Us">عن الشركة</a>
+                    <a href="#growth" class="hover:text-emerald-600 transition" data-ar="مراحل النمو" data-en="Growth Process">مراحل النمو</a>
+                    <a href="#services" class="hover:text-emerald-600 transition" data-ar="خدماتنا" data-en="Services">خدماتنا</a>
+                    <a href="#contact" class="hover:text-emerald-600 transition" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</a>
+                </div>
+
+                <!-- Language Toggle Button -->
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleLanguage()" class="flex items-center gap-2 bg-slate-100 hover:bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full font-bold border border-emerald-200 transition">
+                        <i class="fa-solid fa-globe"></i>
+                        <span id="lang-label">English</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative hero-bg min-h-screen flex items-center justify-center text-white pt-20 px-4 overflow-hidden">
+        <canvas id="particleCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+
+        <div class="max-w-4xl mx-auto text-center space-y-6 fade-in-up relative z-10">
+            <span class="inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide backdrop-blur-md" data-ar="🌱 انطلاقة جديدة نحو الاستثمار المستدام" data-en="🌱 A New Journey Towards Sustainable Investment">🌱 انطلاقة جديدة نحو الاستثمار المستدام</span>
+            
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight" data-ar="شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي" data-en="Express Path for Real Estate & Agricultural Land Reclamation">
+                شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي
+            </h1>
+
+            <p class="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto font-light leading-relaxed" data-ar="نقدم أحدث أساليب استصلاح الأراضي الزراعية والفرص الاستثمارية العقارية الواعدة بأسس علمية وجودة عالية." data-en="Offering modern agricultural land reclamation techniques and promising real estate investment opportunities built on solid expertise.">
+                نقدم أحدث أساليب استصلاح الأراضي الزراعية والفرص الاستثمارية العقارية الواعدة بأسس علمية وجودة عالية.
+            </p>
+
+            <div class="pt-4 flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#contact" class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-emerald-600/40 transition transform hover:-translate-y-1 btn-pulse flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span data-ar="تواصل معنا الآن" data-en="Contact Us Today">تواصل معنا الآن</span>
+                </a>
+                <a href="#services" class="bg-white/10 hover:bg-white/20 text-white backdrop-blur-md px-8 py-4 rounded-xl font-bold border border-white/20 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-leaf"></i>
+                    <span data-ar="اكتشف خدماتنا" data-en="Explore Our Services">اكتشف خدماتنا</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIVE SMART RECLAMATION WIDGET -->
+    <section class="bg-emerald-800 text-white py-6 border-y border-emerald-700">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+            <div class="flex items-center justify-center gap-3">
+                <i class="fa-solid fa-temperature-three-quarters text-3xl text-emerald-300 animate-pulse"></i>
+                <div class="text-right">
+                    <span class="block text-xs text-emerald-200" data-ar="مناخ الاستصلاح المثالي" data-en="Ideal Reclamation Climate">مناخ الاستصلاح المثالي</span>
+                    <span class="font-bold text-lg">28°C - 32°C</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-3">
+                <i class="fa-solid fa-droplet text-3xl text-emerald-300 animate-bounce"></i>
+                <div class="text-right">
+                    <span class="block text-xs text-emerald-200" data-ar="كفاءة أنظمة الري الحديثة" data-en="Modern Irrigation Efficiency">كفاءة أنظمة الري الحديثة</span>
+                    <span class="font-bold text-lg">95% توفير مياه</span>
+                </div>
+            </div>
+            <div class="flex items-center justify-center gap-3">
+                <i class="fa-solid fa-vial text-3xl text-emerald-300 animate-pulse"></i>
+                <div class="text-right">
+                    <span class="block text-xs text-emerald-200" data-ar="معايير جودة التربة والمياه" data-en="Soil & Water Quality Standard">معايير جودة التربة والمياه</span>
+                    <span class="font-bold text-lg">100% معتمد</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION WITH LOGO CARD -->
+    <section id="about" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+            <!-- Company Logo Card -->
+            <div class="relative fade-in-up">
+                <div class="bg-gradient-to-br from-emerald-800 to-slate-900 rounded-2xl p-8 text-center text-white shadow-2xl flex flex-col items-center justify-center min-h-[400px] border border-emerald-700/30">
+                    <div class="w-36 h-36 rounded-2xl overflow-hidden shadow-xl mb-6 bg-white p-3 border-2 border-emerald-400 animate-sway flex items-center justify-center">
+                        <img src="https://i.postimg.cc/jWyQhhZ6/file.png" alt="لوجو الشركة" class="w-full h-full object-contain rounded-xl">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2" data-ar="شركة المسار السريع" data-en="Express Path Company">شركة المسار السريع</h3>
+                    <p class="text-emerald-300 text-sm max-w-xs" data-ar="رؤية مستدامة نحو مستقبل زراعي وعقاري واعد" data-en="A sustainable vision for a promising agricultural & real estate future">
+                        رؤية مستدامة نحو مستقبل زراعي وعقاري واعد
+                    </p>
+                </div>
+            </div>
+
+            <!-- About Text -->
+            <div class="space-y-6 fade-in-up">
+                <span class="text-emerald-600 font-bold uppercase tracking-wider text-sm" data-ar="عن شركة المسار السريع" data-en="About Express Path">عن شركة المسار السريع</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 leading-snug" data-ar="نأسس لرؤية حديثة في استصلاح الأراضي والاستثمار العقاري" data-en="Establishing a Modern Vision in Land Reclamation & Real Estate Investment">
+                    نأسس لرؤية حديثة في استصلاح الأراضي والاستثمار العقاري
+                </h2>
+                <p class="text-slate-600 leading-relaxed" data-ar="تعتبر شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي انطلاقة جديدة تهدف إلى تجهيز واستصلاح الأراضي وتمهيدها للزراعة والاستثمار بأفضل معايير الجودة، مع تقديم استشارات متكاملة وشاملة للمستثمرين." data-en="Express Path for Real Estate & Agricultural Land Reclamation is a fresh initiative aiming to prep and reclaim land for cultivation and investment with top quality standards and full investor consultation.">
+                    تعتبر شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي انطلاقة جديدة تهدف إلى تجهيز واستصلاح الأراضي وتمهيدها للزراعة والاستثمار بأفضل معايير الجودة، مع تقديم استشارات متكاملة وشاملة للمستثمرين.
+                </p>
+                <div class="space-y-3 pt-2">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+                        <span class="font-semibold text-slate-700" data-ar="تجهيز التربة وشبكات الري الحديثة" data-en="Soil prep & modern irrigation systems">تجهيز التربة وشبكات الري الحديثة</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+                        <span class="font-semibold text-slate-700" data-ar="تراخيص قانونية وأوراق رسمية موثقة 100%" data-en="100% Verified Legal Documents">تراخيص قانونية وأوراق رسمية موثقة 100%</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+                        <span class="font-semibold text-slate-700" data-ar="دراسات جدوى متكاملة للمشاريع الاستثمارية" data-en="Comprehensive Feasibility Studies">دراسات جدوى متكاملة للمشاريع الاستثمارية</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GROWTH PROCESS -->
+    <section id="growth" class="py-20 bg-slate-100 px-4">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="text-center max-w-3xl mx-auto space-y-4 fade-in-up">
+                <span class="text-emerald-600 font-bold uppercase tracking-wider text-sm" data-ar="رحلة التحول والنمو" data-en="Journey of Growth">رحلة التحول والنمو</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900" data-ar="كيف نحول الصحراء إلى أرض خضراء منتجة؟" data-en="How We Transform Desert Land into Fertile Green Fields?">
+                    كيف نحول الصحراء إلى أرض خضراء منتجة؟
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-2xl transition transform hover:-translate-y-3 border border-slate-200/60 fade-in-up group">
+                    <div class="w-16 h-16 bg-amber-100 text-amber-700 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase" data-ar="المرحلة الأولى" data-en="Phase 1">المرحلة الأولى</span>
+                    <h3 class="text-xl font-bold text-slate-900 my-3" data-ar="التحليل والتجهيز" data-en="Analysis & Prep">التحليل والتجهيز</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="فحص معملي شامل للتربة والمياه وتحديد المنسوب الأمثل وتسوية الأرض لاستصلاحها." data-en="Comprehensive lab testing for soil and water, leveling, and prepping land for cultivation.">
+                        فحص معملي شامل للتربة والمياه وتحديد المنسوب الأمثل وتسوية الأرض لاستصلاحها.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-2xl transition transform hover:-translate-y-3 border border-slate-200/60 fade-in-up group">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-faucet-drip"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase" data-ar="المرحلة الثانية" data-en="Phase 2">المرحلة الثانية</span>
+                    <h3 class="text-xl font-bold text-slate-900 my-3" data-ar="تأسيس شبكات الري" data-en="Irrigation Infrastructure">تأسيس شبكات الري</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="مد شبكات الري بالتنقيط أو الرش وتجهيز مصادر الطاقة ومحطات المولدات والمياه." data-en="Installing drip and sprinkler irrigation networks and powering up water stations.">
+                        مد شبكات الري بالتنقيط أو الرش وتجهيز مصادر الطاقة ومحطات المولدات والمياه.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-md hover:shadow-2xl transition transform hover:-translate-y-3 border border-slate-200/60 fade-in-up group">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-tree"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase" data-ar="المرحلة الثالثة" data-en="Phase 3">المرحلة الثالثة</span>
+                    <h3 class="text-xl font-bold text-slate-900 my-3" data-ar="الزراعة والإنتاج" data-en="Cultivation & Harvest">الزراعة والإنتاج</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="غرس المحاصيل المناسبة وتسليم أرض زراعية منتجة ذات أوراق وثائقية رسمية كاملة." data-en="Planting optimal crops and delivering fully authorized, productive agricultural land.">
+                        غرس المحاصيل المناسبة وتسليم أرض زراعية منتجة ذات أوراق وثائقية رسمية كاملة.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto space-y-12">
+            <div class="text-center max-w-3xl mx-auto space-y-4 fade-in-up">
+                <span class="text-emerald-600 font-bold uppercase tracking-wider text-sm" data-ar="خدماتنا الاستثمارية" data-en="Our Services">خدماتنا الاستثمارية</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900" data-ar="حلول متكاملة في الاستثمار العقاري والزراعي" data-en="Complete Solutions in Real Estate & Agriculture">
+                    حلول متكاملة في الاستثمار العقاري والزراعي
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 hover:border-emerald-500 transition fade-in-up">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-tractor"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2" data-ar="استصلاح وتأهيل الأراضي" data-en="Land Reclamation">استصلاح وتأهيل الأراضي</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="تمهيد وتجهيز التربة بأعلى المواصفات وتوفير مصادر المياه وشبكات الري." data-en="Preparing and leveling soil with top specifications and full water infrastructure.">
+                        تمهيد وتجهيز التربة بأعلى المواصفات وتوفير مصادر المياه وشبكات الري.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 hover:border-emerald-500 transition fade-in-up">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2" data-ar="الاستثمار العقاري والزراعي" data-en="Real Estate Investment">الاستثمار العقاري والزراعي</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="نوفر أراضٍ ومساحات استثمارية ممتازة مع متابعة مستمرة وتراخيص قانونية." data-en="Providing prime investment land with legal clearance and full ongoing management.">
+                        نوفر أراضٍ ومساحات استثمارية ممتازة مع متابعة مستمرة وتراخيص قانونية.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-100 hover:border-emerald-500 transition fade-in-up">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-4">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2" data-ar="استشارات ودراسات جدوى" data-en="Feasibility Studies">استشارات ودراسات جدوى</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed" data-ar="دراسات متخصصة لتحديد نوعية الزراعة والعائد الاستثماري المتوقع بدقة." data-en="Specialized studies to determine ideal crop choices and accurate ROI projections.">
+                        دراسات متخصصة لتحديد نوعية الزراعة والعائد الاستثماري المتوقع بدقة.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="py-20 bg-slate-900 text-white px-4 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 relative z-10">
+            <div class="space-y-8 fade-in-up">
+                <div class="space-y-4">
+                    <span class="text-emerald-400 font-bold uppercase tracking-wider text-sm" data-ar="تواصل معنا" data-en="Contact Us">تواصل معنا</span>
+                    <h2 class="text-3xl md:text-4xl font-bold" data-ar="يسعدنا تواصلك واستفسارك في أي وقت" data-en="We Are Ready to Answer Your Inquiries">
+                        يسعدنا تواصلك واستفسارك في أي وقت
+                    </h2>
+                    <p class="text-slate-400" data-ar="فريق شركة المسار السريع جاهز لتقديم الاستشارات والمعاينات الميدانية." data-en="The Express Path team is ready to provide consultation and field visits.">
+                        فريق شركة المسار السريع جاهز لتقديم الاستشارات والمعاينات الميدانية.
+                    </p>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-emerald-600/20 text-emerald-400 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs text-slate-400 uppercase font-semibold" data-ar="أرقام الهاتف" data-en="Phone Numbers">أرقام الهاتف</h4>
+                            <a href="tel:01003977004" class="text-lg font-bold hover:text-emerald-400 transition block">01003977004</a>
+                            <a href="tel:01001700174" class="text-lg font-bold hover:text-emerald-400 transition block">01001700174</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-emerald-600/20 text-emerald-400 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs text-slate-400 uppercase font-semibold" data-ar="البريد الإلكتروني" data-en="Email Address">البريد الإلكتروني</h4>
+                            <a href="mailto:fasttruckegypt@gmail.com" class="text-lg font-bold hover:text-emerald-400 transition">fasttruckegypt@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-emerald-600/20 text-emerald-400 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs text-slate-400 uppercase font-semibold" data-ar="الموقع واللوكيشن" data-en="Location">الموقع واللوكيشن</h4>
+                            <a href="https://maps.app.goo.gl/x1A8CczXL8qazzHk7?g_st=iw" target="_blank" class="text-emerald-400 hover:underline font-semibold flex items-center gap-2 mt-1">
+                                <span data-ar="عرض الموقع على الخريطة (Google Maps)" data-en="View Location on Google Maps">عرض الموقع على الخريطة (Google Maps)</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 fade-in-up">
+                <form class="space-y-4" onsubmit="sendToWhatsApp(event)">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-2" data-ar="الاسم بالكامل" data-en="Full Name">الاسم بالكامل</label>
+                        <input id="user_name" type="text" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-2" data-ar="رقم الهاتف / الواتساب" data-en="Phone / WhatsApp">رقم الهاتف / الواتساب</label>
+                        <input id="user_phone" type="tel" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-2" data-ar="رسالتك أو تفاصيل الاستفسار" data-en="Your Message">رسالتك أو تفاصيل الاستفسار</label>
+                        <textarea id="user_message" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-emerald-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 btn-pulse">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span data-ar="إرسال الطلب عبر الواتساب" data-en="Send Request via WhatsApp">إرسال الطلب عبر الواتساب</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/201003977004" target="_blank" class="fixed bottom-6 right-6 bg-emerald-500 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-2xl z-50 hover:bg-emerald-600 transition transform hover:scale-110 btn-pulse">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-500 py-8 border-t border-slate-800 text-center text-sm">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p data-ar="جميع الحقوق محفوظة © شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي" data-en="All Rights Reserved © Express Path Real Estate & Land Reclamation">
+                جميع الحقوق محفوظة © شركة المسار السريع للاستثمار العقاري واستصلاح الأراضي
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        let currentLang = 'ar';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            const htmlTag = document.documentElement;
+            const langLabel = document.getElementById('lang-label');
+
+            if (currentLang === 'en') {
+                htmlTag.setAttribute('lang', 'en');
+                htmlTag.setAttribute('dir', 'ltr');
+                document.body.classList.add('en-font');
+                langLabel.textContent = 'العربية';
+            } else {
+                htmlTag.setAttribute('lang', 'ar');
+                htmlTag.setAttribute('dir', 'rtl');
+                document.body.classList.remove('en-font');
+                langLabel.textContent = 'English';
+            }
+
+            document.querySelectorAll('[data-ar]').forEach(el => {
+                const text = el.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    el.textContent = text;
+                }
+            });
+        }
+
+        function sendToWhatsApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('user_name').value;
+            const phone = document.getElementById('user_phone').value;
+            const message = document.getElementById('user_message').value;
+
+            const whatsappNumber = "201003977004";
+            const text = `طلب استفسار جديد من موقع الشركة:%0A- *الاسم:* ${encodeURIComponent(name)}%0A- *رقم الهاتف:* ${encodeURIComponent(phone)}%0A- *تفاصيل الرسالة:* ${encodeURIComponent(message)}`;
+            
+            window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class LeafParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 3;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.y > canvas.height) {
+                    this.y = -10;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(16, 185, 129, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 40; i++) {
+            particles.push(new LeafParticle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>
